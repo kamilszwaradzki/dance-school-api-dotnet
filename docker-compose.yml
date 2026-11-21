@@ -1,0 +1,15 @@
+services:
+  mssql:
+    env_file: ".env"
+    image: mcr.microsoft.com/mssql/server:2022-CU28-ubuntu-22.04
+    container_name: dance-school-db
+    environment:
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+    restart: unless-stopped
+
+volumes:
+  mssql-data:
