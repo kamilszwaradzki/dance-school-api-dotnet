@@ -5,7 +5,7 @@ namespace DanceSchool.Api.Domain.Entities;
 public class User : Entity
 {
     public string EmailAddress { get; set; } = null!;
-    public string? Name  { get; set; }
+    public string? Name { get; set; }
     public UserRole Role { get; set; }
     public string PasswordHash { get; set; } = null!;
     public ICollection<DanceGroup> InstructedGroups { get; set; } = [];
