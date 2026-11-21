@@ -18,4 +18,8 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\DanceSchool.Api\DanceSchool.Api.csproj" />
+  </ItemGroup>
+
 </Project>
