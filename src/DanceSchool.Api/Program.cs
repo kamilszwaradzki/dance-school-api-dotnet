@@ -14,10 +14,7 @@ builder.Services.AddDbContext<DanceSchoolDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")
     ));
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
@@ -29,10 +26,12 @@ if (app.Environment.IsDevelopment())
 {
     await using (var scope = app.Services.CreateAsyncScope())
     {
+        var db = scope.ServiceProvider.GetRequiredService<DanceSchoolDbContext>();
+        await db.Database.MigrateAsync();
+
         await scope.ServiceProvider.GetRequiredService<DbSeeder>().SeedAsync();
     }
 
-    // Configure the HTTP request pipeline.
     app.MapOpenApi();
 }
 

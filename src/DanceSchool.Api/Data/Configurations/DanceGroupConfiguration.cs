@@ -9,11 +9,6 @@ public class DanceGroupConfiguration : IEntityTypeConfiguration<DanceGroup>
 {
     public void Configure(EntityTypeBuilder<DanceGroup> builder)
     {
-        builder.ToTable("DanceGroups");
-
-        builder.Property(x => x.Capacity)
-            .IsRequired();
-
         builder.ToTable("DanceGroups", t => t.HasCheckConstraint("CK_DanceGroups_Capacity", "[Capacity] > 0"));
     }
 }

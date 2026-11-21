@@ -14,10 +14,6 @@ public class SqlServerFixture : IAsyncLifetime
 
     public Task DisposeAsync() => _container.DisposeAsync().AsTask();
 
-    /// <summary>
-    /// Tworzy nową, pustą bazę (unikalna nazwa), uruchamia migracje
-    /// i zwraca connection string oraz gotowy kontekst.
-    /// </summary>
     public async Task<(string ConnectionString, DanceSchoolDbContext Context)> CreateDatabaseAsync(
         TimeProvider? time = null)
     {
@@ -31,9 +27,6 @@ public class SqlServerFixture : IAsyncLifetime
         return (cs, db);
     }
 
-    /// <summary>
-    /// Otwiera NOWY kontekst na istniejącej bazie (do weryfikacji stanu z bazy).
-    /// </summary>
     public DanceSchoolDbContext OpenContext(string connectionString, TimeProvider? time = null)
     {
         var options = new DbContextOptionsBuilder<DanceSchoolDbContext>()

@@ -19,7 +19,6 @@ public class EnrollmentServiceTests(SqlServerFixture fx) : IClassFixture<SqlServ
         var result = await new EnrollmentService(db).EnrollAsync(user.Id, group.Id);
         Assert.Equal(EnrollResult.Success, result);
 
-        // Weryfikacja na świeżym kontekście
         await using var verify = fx.OpenContext(cs);
         var e = await verify.Enrollments.SingleAsync();
         Assert.Equal(EnrollmentStatus.Active, e.Status);

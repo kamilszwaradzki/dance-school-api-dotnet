@@ -29,7 +29,6 @@ public class EnrollmentService
         var existing = await _db.Enrollments
             .FirstOrDefaultAsync(e => e.UserId == userId && e.DanceGroupId == groupId, ct);
 
-        // Aktywny lub w kolejce → już zapisany. Anulowany → ponownie użyj rekordu.
         if (existing is { Status: EnrollmentStatus.Active or EnrollmentStatus.Waitlisted })
             return EnrollResult.AlreadyEnrolled;
 
@@ -55,7 +54,6 @@ public class EnrollmentService
 
         existing.Status = isFull ? EnrollmentStatus.Waitlisted : EnrollmentStatus.Active;
         existing.Position = isFull ? nextPosition : null;
-        // CreatedAt/UpdatedAt nadpisze UpdateTimestamps w SaveChanges
 
         await _db.SaveChangesAsync(ct);
         await tx.CommitAsync(ct);
@@ -82,7 +80,6 @@ public class EnrollmentService
         if (enrollment is null)
             return CancelResult.NotEnrolled;
 
-        // Zapamiętaj PRZED zmianą statusu
         var wasActive = enrollment.Status == EnrollmentStatus.Active;
 
         enrollment.Status = EnrollmentStatus.Cancelled;
@@ -91,7 +88,6 @@ public class EnrollmentService
         var promoted = false;
         if (wasActive)
         {
-            // Jedno zapytanie: cała kolejka, uporządkowana
             var queue = await _db.Enrollments
                 .Where(e => e.DanceGroupId == groupId && e.Status == EnrollmentStatus.Waitlisted)
                 .OrderBy(e => e.Position)
@@ -103,7 +99,6 @@ public class EnrollmentService
                 queue[0].Position = null;
                 promoted = true;
 
-                // Reszta dostaje nowe numery od 1 (bez zapytań do bazy)
                 for (var i = 1; i < queue.Count; i++)
                     queue[i].Position = i;
             }

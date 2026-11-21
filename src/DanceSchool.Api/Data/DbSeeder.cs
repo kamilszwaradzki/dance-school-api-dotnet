@@ -25,9 +25,7 @@ public class DbSeeder(
 
         User CreateUser(string email, UserRole role, string? name = null)
         {
-            static string NormalizeEmail(string email) { return email.Trim().ToLowerInvariant(); }
-
-            var user = new User { EmailAddress = NormalizeEmail(email), Name = name, Role = role };
+            var user = new User { EmailAddress = email, Name = name, Role = role };
             user.PasswordHash = hasher.HashPassword(user, password);
 
             return user;
